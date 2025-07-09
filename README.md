@@ -139,8 +139,4 @@ python train_student_imagenet.py \
 
 
  
-  title={Knowledge Distillation Using Hierarchical Self-Supervision Augmented Distribution}, 
-  year={2022},
-  pages={1-15},
-  doi={10.1109/TNNLS.2022.3186807}}
-```
+ 
