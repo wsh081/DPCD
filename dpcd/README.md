@@ -64,7 +64,7 @@ More commands for training various teacher-student pairs can be found in [train_
 ####  Results of the same architecture style between teacher and student networks
 
 |Teacher <br> Student | WRN-40-2 <br> WRN-16-2 | ResNet32×4  <br> ResNet8×4 | ResNet-56 <br> ResNet-20 | WRN-40-2  <br> WRN-40-1 | VGG13<br> VGG8 |
-|:---------------:|:-----------------:|:-----------------:|:-----------------:|:--------------------:|:--------------------:|
+|:---------------:|:-----------------:|:-----------------:|:-----------------:|:--------------------:|
 | Teacher  |    75.61 | 79.42 | 72.34 | 75.61 | 74.64 |
 | Student | 73.26| 72.50| 69.06| 71.98| 70.36 |
 | DPCD | 77.30| 77.42| 72.58| 76.04| 75.83|
