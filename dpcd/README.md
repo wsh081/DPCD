@@ -1,5 +1,6 @@
 
-# Hierarchical Self-supervised Augmented Knowledge Distillation
+# Dual-path collaborative distillation
+
 
 ## Installation
 
@@ -64,7 +65,7 @@ More commands for training various teacher-student pairs can be found in [train_
 ####  Results of the same architecture style between teacher and student networks
 
 |Teacher <br> Student | WRN-40-2 <br> WRN-16-2 | ResNet32×4  <br> ResNet8×4 | ResNet-56 <br> ResNet-20 | WRN-40-2  <br> WRN-40-1 | VGG13<br> VGG8 |
-|:---------------:|:-----------------:|:-----------------:|:-----------------:|:--------------------:|
+|:---------------:|:-----------------:|:-----------------:|:-----------------:|:--------------------:|:--------------------:|
 | Teacher  |    75.61 | 79.42 | 72.34 | 75.61 | 74.64 |
 | Student | 73.26| 72.50| 69.06| 71.98| 70.36 |
 | DPCD | 77.30| 77.42| 72.58| 76.04| 75.83|
@@ -73,8 +74,7 @@ More commands for training various teacher-student pairs can be found in [train_
 
 ####  Results of different architecture styles between teacher and student networks
 
-|Teacher <br> Student |ResNet32×4  <br>ShufffeNetV2  | VGG13 <br> MobileNetV2 |  ResNet50  <br> MobileNetV2 | ResNet32x4 <br> ShuffleNetV1 | WRN-40-2
- <br> ShuffleNetV1 |
+|Teacher <br> Student |ResNet32×4  <br>ShufffeNetV2  | VGG13 <br> MobileNetV2 |  ResNet50  <br> MobileNetV2 | ResNet32x4 <br> ShuffleNetV1 | WRN-40-2<br> ShuffleNetV1 |
 |:---------------:|:-----------------:|:-----------------:|:-----------------:|:--------------------:|:--------------------:|
 | Teacher  |    79.42| 74.64 |79.34 |79.42 |75.61   |
 | Student | 71.82| 64.60| 64.60 |70.50| 70.50 |
@@ -132,10 +132,10 @@ python train_student_imagenet.py \
 
 ####  Results on the teacher-student pair of ResNet-34 and ResNet-18 
 
-| Accuracy |Teacher |Teacher* | Student  |  DPCD|
-|:---------------:|:-----------------:|:-----------------:|:-----------------:|:--------------------:
-| Top-1 | 73.31 | 75.48 | 69.75 | 71.89| 
-| Top-5 | 91.42 | 92.67 | 89.07 | 90.50 |
+| Accuracy |Teacher | Student  |  DPCD|
+|:---------------:|:-----------------:|:-----------------:|:-----------------:|
+| Top-1 | 73.31  | 69.75 | 71.89| 
+| Top-5 | 91.42  | 89.07 | 90.50 |
 
 
  
