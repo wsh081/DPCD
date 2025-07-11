@@ -109,15 +109,11 @@ class DynamicDKD32(nn.Module):
         adjust_ratio = torch.sigmoid(scale_factor * delta)
 
         # 动态参数调整
-        alpha = self.base_alpha * (1 + 1.0 * adjust_ratio)
-        beta = self.base_beta * (1 - 0.5 * adjust_ratio)
-
-        # alpha = self.base_alpha * (1 + 0.6* adjust_ratio)
-        # beta = self.base_beta * (1 - 0.4 * adjust_ratio)
+       
 
         alpha = torch.clamp(alpha, 0.5, 2.0)
 
-        beta = torch.clamp(beta, 0.4, 1.0)
+        beta = torch.clamp(beta, 0.5, 1.0)
 
         # 损失计算部分
         gt_mask = _get_gt_mask(logits_student, target)
@@ -165,9 +161,9 @@ def cat_mask(t, mask1, mask2):
 
 
 
-class DKDloss1(nn.Module):
+class CEDloss(nn.Module):
     def __init__(self, ):
-        super(DKDloss1, self).__init__()
+        super(CEDloss, self).__init__()
 
     def forward(self, logits_student, logits_teacher, target, alpha=1.0, beta=2.0, temperature=3.0, gamma=2.0):
         # 确保输入尺寸一致
@@ -318,7 +314,7 @@ def main_worker(gpu, ngpus_per_node, args):
     criterion_div = DynamicDKD32().cuda(args.gpu)
 
 
-    criterion_crd = DKDloss1().cuda(args.gpu)
+    criterion_crd = CEDloss().cuda(args.gpu)
 
     criterion_list = nn.ModuleList([])
 
@@ -435,7 +431,7 @@ def main_worker(gpu, ngpus_per_node, args):
                 loss_crd += criterion_crd(logits, ss_logits[i], target)
 
 
-            loss = loss_cls + loss_div + loss_crd
+            loss = loss_cls + loss_div 
 
             loss.backward()
             optimizer.step()
