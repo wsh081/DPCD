@@ -143,7 +143,7 @@ class DistillKL(nn.Module):
 
 
 class DynamicDKD32(nn.Module):
-    def __init__(self, history_size=2000, base_alpha=1.0, base_beta=8.0,warmup=20):
+    def __init__(self, history_size=2000, base_alpha=1.0, base_beta=6.0,warmup=20):
         super().__init__()
         self.conf_history = deque(maxlen=history_size)
         self.base_alpha = base_alpha
@@ -207,7 +207,7 @@ class DynamicDKD32(nn.Module):
         #res56
         beta = torch.clamp(beta, 5.0, 8.0)
         #vgg wrn
-        # beta = torch.clamp(beta, 4.0, 7.0)
+       
 
         # 损失计算部分
         gt_mask = _get_gt_mask(logits_student, target)
@@ -253,58 +253,15 @@ def cat_mask(t, mask1, mask2):
     return rt
 
 
-# 定义DKDloss类
-class DKDloss(nn.Module):
-    def __init__(self):
-        super(DKDloss, self).__init__()
-
-
-    # 前向传播
-    def forward(self, logits_student, logits_teacher, target,alpha=1.0, beta=8.0, temperature=3.0):
-        # 获取ground truth mask和非ground truth mask
-        gt_mask = _get_gt_mask(logits_student, target)
-        other_mask = _get_other_mask(logits_student, target)
-
-        # 对学生和教师logits进行softmax
-        pred_student = F.softmax(logits_student / temperature, dim=1)
-        pred_teacher = F.softmax(logits_teacher / temperature, dim=1)
-
-        # 拼接mask
-        pred_student = cat_mask(pred_student, gt_mask, other_mask)
-        pred_teacher = cat_mask(pred_teacher, gt_mask, other_mask)
-
-        # 计算tckd_loss
-        log_pred_student = torch.log(pred_student)
-        tckd_loss = (
-                F.kl_div(log_pred_student, pred_teacher, reduction='sum')
-                * (temperature ** 2) / target.shape[0]
-        )
-
-        # 计算nckd_loss
-        pred_teacher_part2 = F.softmax(
-            logits_teacher / temperature - 1000.0 * gt_mask, dim=1
-        )
-        log_pred_student_part2 = F.log_softmax(
-            logits_student / temperature - 1000.0 * gt_mask, dim=1
-        )
-        nckd_loss = (
-                F.kl_div(log_pred_student_part2, pred_teacher_part2, reduction='sum')
-                * (temperature ** 2) / target.shape[0]
-        )
-
-        # 计算总的loss
-        loss = alpha * tckd_loss + beta * nckd_loss
-
-        return loss
 
 
 
 
 
 
-class DKDloss1(nn.Module):
+class CEDloss(nn.Module):
     def __init__(self,):
-        super(DKDloss1, self).__init__()
+        super(CEDloss, self).__init__()
 
 
     def forward(self, logits_student, logits_teacher, target, alpha=1.0, beta=8.0, temperature=3.0, gamma=2.0):
@@ -398,7 +355,7 @@ def adjust_lr(optimizer, epoch, args, step=0, all_iters_per_epoch=0):
 
 def apply_gradient_projection(model, main_loss_weight=0.7):
     """
-    将DKDloss1的梯度投影到DynamicDKD32的主方向
+   
     """
     for name, param in model.named_parameters():
         if param.grad is None:
@@ -630,7 +587,7 @@ if __name__ == '__main__':
     #
     criterion_div = DynamicDKD32()
 
-    criterion_crd =DKDloss1()
+    criterion_crd =CEDloss()
 
 
 
