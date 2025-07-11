@@ -1,6 +1,6 @@
 
 # Dual-path collaborative distillation
-
+ - This project provides source code for our Dual-path collaborative distillation (DPCD).
 
 ## Installation
 
@@ -9,11 +9,9 @@
 
 Python 3.8 ([Anaconda](https://www.anaconda.com/) is recommended)
 
-CUDA 11.1
+CUDA 12.1
 
-PyTorch 1.6.0
-
-NCCL for CUDA 11.1
+PyTorch 2.1.1
 
 
 ## Perform  experiments on CIFAR-100 dataset
@@ -74,13 +72,30 @@ More commands for training various teacher-student pairs can be found in [train_
 
 ####  Results of different architecture styles between teacher and student networks
 
-|Teacher <br> Student |ResNet32×4  <br>ShufffeNetV2  | VGG13 <br> MobileNetV2 |  ResNet50  <br> MobileNetV2 | ResNet32x4 <br> ShuffleNetV1 | WRN-40-2<br> ShuffleNetV1 |
-|:---------------:|:-----------------:|:-----------------:|:-----------------:|:--------------------:|:--------------------:|
-| Teacher  |    79.42| 74.64 |79.34 |79.42 |75.61   |
-| Student | 71.82| 64.60| 64.60 |70.50| 70.50 |
-| DPCD | 78.91  |70.87 | 71.38 | 77.87  |77.80 |
+|Teacher <br> Student |ResNet32×4  <br>ShufffeNetV2  |  ResNet50  <br> MobileNetV2 | ResNet32x4 <br> ShuffleNetV1 | WRN-40-2<br> ShuffleNetV1 |
+|:---------------:|:-----------------:|:-----------------:|:--------------------:|:--------------------:|
+| Teacher  |    79.42|79.34 |79.42 |75.61   |
+| Student | 71.82|  64.60 |70.50| 70.50 |
+| DPCD | 78.91  | 71.38 | 77.87  |77.80 |
 
 
+
+#### Obtain the student network weights
+
+The pre-trained Student networks can be downloaded from [Baidu Netdisk](https://pan.baidu.com/s/19TFpc0HVcJ1ucofyTOQe-g) (Access code: qspu).
+
+unzip to the `./checkpoint` folder
+
+#### Testing student networks
+The accuracy of the student network is recorded in the saved weight files. Of course, you can also evaluate the student network using the following script commands.
+```
+
+python test_model.py \
+  --arch wrn_16_2_aux \
+  --student-weights ./checkpoint/train_student_cifar_tarch_wrn_40_2_aux_arch_wrn_16_2_aux_dataset_cifar100_seed0/wrn_16_2_aux_best.pth.tar
+
+```
+More test commands for the student network can be found in [test_model.sh]
 
 
 ## Perform  experiments on ImageNet dataset
